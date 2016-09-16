@@ -23,6 +23,19 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.8</source>
@@ -34,12 +47,14 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>1.1.8</version>
-                <targetClasses>
-                    <param>com.mycompany.whatodo.*</param>
-                </targetClasses>
-                <targetTests>
-                    <param>com.mycompany.whatodo.*</param>
-                </targetTests>
+                <configuration>
+                    <targetClasses>
+                        <param>whatodo.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>whatodo.*</param>
+                    </targetTests>
+                </configuration>
             </plugin>
         </plugins>
     </build>
