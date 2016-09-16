@@ -15,3 +15,5 @@ Ohjelmaan tulee pääsivu, jossa on listattuna käyttäjän lisäämät tehtäv�
 Käyttäjällä on luonnollisesti mahdollisuus lisätä tehtäviä. Pääsivun määrittämöttömässä sijainnissa on nappula josta painamalla aukeaa tehtävän luontisivu johon käyttäjä kirjaa otsikon, tarkennuksen, deadlinen sekä prioriteetin.
 
 Näillä nyt alkuun.
+
+![Alt text](/whatodo/Dokumentaatio/luokka.png "Luokkakaavio")
