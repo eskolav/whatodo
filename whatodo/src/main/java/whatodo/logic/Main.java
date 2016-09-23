@@ -24,7 +24,6 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
         TaskHandler handler = null;
 
         try {
@@ -39,20 +38,9 @@ public class Main {
         }
 
         MainUi ui = new MainUi();
-        ui.setVisible(true);
         ui.setTasks(handler);
+        ui.setVisible(true);
 
-        try {
-
-            FileOutputStream fout = new FileOutputStream("/home/esva/whatodo/file.ser");
-            ObjectOutputStream oos = new ObjectOutputStream(fout);
-            oos.writeObject(handler);
-            oos.close();
-            System.out.println("Done");
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
 }

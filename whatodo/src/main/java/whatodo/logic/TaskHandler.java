@@ -27,7 +27,10 @@ public class TaskHandler implements Serializable {
 
     public void addTask(String name, Date exp, int prior, String description) {
         tasks.add(new Task(name, exp, prior, description));
+    }
 
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     public Task getTask(String name) {

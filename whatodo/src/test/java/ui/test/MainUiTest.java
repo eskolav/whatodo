@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,9 +23,12 @@ import whatodo.logic.TaskHandler;
  *
  * @author esva
  */
-public class UiTest {
+public class MainUiTest {
 
-    public UiTest() {
+    private TaskHandler handler;
+    private MainUi ui;
+    
+    public MainUiTest() {
     }
 
     @BeforeClass
@@ -37,34 +41,11 @@ public class UiTest {
 
     @Before
     public void setUp() {
-        TaskHandler handler = null;
-
-        try {
-
-            FileInputStream fin = new FileInputStream("/home/esva/whatodo/file.ser");
-            ObjectInputStream ois = new ObjectInputStream(fin);
-            handler = (TaskHandler) ois.readObject();
-            ois.close();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        MainUi ui = new MainUi();
-        ui.setVisible(true);
+        handler = new TaskHandler();
+        
+        handler.addTask("name", new Date(), 2, "description");
+        ui = new MainUi();
         ui.setTasks(handler);
-
-        try {
-
-            FileOutputStream fout = new FileOutputStream("/home/esva/whatodo/file.ser");
-            ObjectOutputStream oos = new ObjectOutputStream(fout);
-            oos.writeObject(handler);
-            oos.close();
-            System.out.println("Done");
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @After
@@ -75,4 +56,8 @@ public class UiTest {
     //
     // @Test
     // public void hello() {}
+    @Test
+    public void tasksInPanel() {
+        
+    }
 }
