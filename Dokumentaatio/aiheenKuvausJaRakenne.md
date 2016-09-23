@@ -16,4 +16,4 @@ Käyttäjällä on luonnollisesti mahdollisuus lisätä tehtäviä. Pääsivun m
 
 Näillä nyt alkuun.
 
-![Alt text](/whatodo/Dokumentaatio/luokka.png "Luokkakaavio")
+![Alt text](https://raw.githubusercontent.com/eskolav/whatodo/master/Dokumentaatio/luokka.png)
