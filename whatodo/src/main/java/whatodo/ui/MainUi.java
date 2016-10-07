@@ -5,10 +5,19 @@
  */
 package whatodo.ui;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import whatodo.logic.Task;
 import whatodo.logic.TaskHandler;
 
 /**
@@ -30,27 +39,16 @@ public class MainUi extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        taskList = new javax.swing.JPanel();
-        taskScroller = new javax.swing.JScrollBar();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
         create = new javax.swing.JButton();
         find = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        taskTable = new javax.swing.JTable();
+
+        jRadioButtonMenuItem1.setSelected(true);
+        jRadioButtonMenuItem1.setText("jRadioButtonMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        taskList.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout taskListLayout = new javax.swing.GroupLayout(taskList);
-        taskList.setLayout(taskListLayout);
-        taskListLayout.setHorizontalGroup(
-            taskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, taskListLayout.createSequentialGroup()
-                .addContainerGap(527, Short.MAX_VALUE)
-                .addComponent(taskScroller, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        taskListLayout.setVerticalGroup(
-            taskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(taskScroller, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-        );
 
         create.setFont(new java.awt.Font("Ubuntu", 0, 48)); // NOI18N
         create.setText("+");
@@ -63,18 +61,43 @@ public class MainUi extends javax.swing.JFrame {
         find.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         find.setText("Find");
 
+        taskTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Task", "Created", "Priority", ""
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(taskTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(44, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(find, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(taskList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(167, 167, 167)
+                        .addComponent(find, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
@@ -84,9 +107,9 @@ public class MainUi extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(find, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addComponent(taskList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
         );
 
         pack();
@@ -95,22 +118,37 @@ public class MainUi extends javax.swing.JFrame {
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
         AddTask taskAdder = new AddTask();
         taskAdder.setVisible(true);
-        handler.addTask(taskAdder.getTask());
-        JTextArea text = new JTextArea(taskAdder.getTask().toString());
-        text.setSize(123, 123);
-        taskList.add(text);
 
-        try {
+        taskAdder.addComponentListener(new ComponentAdapter() {
 
-            FileOutputStream fout = new FileOutputStream("/home/esva/whatodo/file.ser");
-            ObjectOutputStream oos = new ObjectOutputStream(fout);
-            oos.writeObject(handler);
-            oos.close();
-            System.out.println("Done");
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                synchronized (this) {
+                    taskAdder.setVisible(false);
+                    this.notify();
+                    System.out.println("tiii");
+                    Task task = taskAdder.getTask();
+                    handler.addTask(task);
+                    DefaultTableModel model = (DefaultTableModel) taskTable.getModel();
+                    model.addRow(new Object[]{task.getName(), task.getExpirationDate().toString(), task.getPriority(), "moi"});
+                    taskTable.revalidate();
+                    taskTable.repaint();
+                    setVisible(true);
+                    try {
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+                        FileOutputStream fout = new FileOutputStream("file.ser");
+                        ObjectOutputStream oos = new ObjectOutputStream(fout);
+                        oos.writeObject(handler);
+                        oos.close();
+                        System.out.println("Done");
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+
+        });
     }//GEN-LAST:event_createActionPerformed
 
     /**
@@ -150,17 +188,20 @@ public class MainUi extends javax.swing.JFrame {
 
     public void setTasks(TaskHandler handler) {
         this.handler = handler;
+        DefaultTableModel model = (DefaultTableModel) taskTable.getModel();
         for (int i = 0; i < handler.getTaskList().size(); i++) {
-            JTextField text = new JTextField(handler.getTaskList().get(i).toString());
-            text.setSize(123, 123);
-            taskList.add(text);
+            JButton button = new JButton();
+            button.setSize(20, 10);
+            button.setText("Open");
+            model.addRow(new Object[]{handler.getTaskList().get(i).getName(), handler.getTaskList().get(i).getCreationDate().toString(), handler.getTaskList().get(i).getPriority(), button});
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton create;
     private javax.swing.JTextField find;
-    private javax.swing.JPanel taskList;
-    private javax.swing.JScrollBar taskScroller;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable taskTable;
     // End of variables declaration//GEN-END:variables
 }

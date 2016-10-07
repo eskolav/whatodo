@@ -28,7 +28,7 @@ public class Main {
 
         try {
 
-            FileInputStream fin = new FileInputStream("/home/esva/whatodo/file.ser");
+            FileInputStream fin = new FileInputStream("file.ser");
             ObjectInputStream ois = new ObjectInputStream(fin);
             handler = (TaskHandler) ois.readObject();
             ois.close();

@@ -49,10 +49,10 @@
                 <version>1.1.8</version>
                 <configuration>
                     <targetClasses>
-                        <param>whatodo.*</param>
+                        <param>whatodo.logic.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>whatodo.*</param>
+                        <param>whatodo.ui.*</param>
                     </targetTests>
                 </configuration>
             </plugin>
